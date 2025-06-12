@@ -1,42 +1,27 @@
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "FiraSans-Regular";
+  src: url("public/font/FiraSans-Regular.ttf") format("ttf");
+  font-weight: 400;
+  font-style: normal;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@font-face {
+  font-family: "Gabarito-VariableFont_wght";
+  src: url("public/font/Gabarito-VariableFont_wght.otf") format("otf");
+  font-weight: 400;
+  font-style: normal;
 }
 
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
+@layer base {
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
+@layer components {
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
 }
+@layer utilities {
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
 }
