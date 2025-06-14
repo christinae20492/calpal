@@ -11,5 +11,111 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("STORAGE_DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String 
+  type              String  
+  provider          String 
+  providerAccountId String 
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?  
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text 
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique 
+  userId       String   
+  expires      DateTime
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model User {
+
+  id        String      @id @default(cuid())
+  createdAt DateTime @default(now())
+  email     String   @unique
+  firstName      String
+  lastName String
+  password String
+  
+
+
+  Ingredients Ingredients[]
+
+  Account Account[]
+
+  Session Session[]
+
+  Meals Meals[]
+
+  MealItem MealItem[]
+}
+
+model Ingredients {
+  id        String      @id @default(cuid())
+  name String
+  calories Float
+  servings Float
+  satfat Float
+  transfat Float
+  cholesterol Float
+  sodium Float
+  carbs Float
+  protein Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  userId String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Meals {
+  id            String    @id @default(cuid())
+  date          DateTime  @unique
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  breakfast     String[]
+  lunch         String[]
+  dinner        String[]
+  snacks        String[]
+
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+}
+
+model MealItem {
+  id            String    @id @default(cuid())
+  name          String  
+  servingSize   Float   
+  totalCalories Float   
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  ingredients   String[]
+
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
